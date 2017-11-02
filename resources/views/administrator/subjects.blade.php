@@ -9,22 +9,44 @@
 	<div class="col s9">
 		<div class="card">	
 			<div class="card-content">
-				<span class="card-title"><i class="fa fa-book" aria-hidden="true"></i> Subjects</span>
-				<br>
 				<div class="row">
-				      <div class="col s4">
-				      	 <a class='btn pink modal-trigger' href='#addSubject' ><i class="material-icons left">add</i> Add subject</a>
-				      </div>
-				      <div class="col s4">
-				       	  <select id="course">
+					<div class="col s6">
+						<span class="card-title"><i class="fa fa-book" aria-hidden="true"></i> Subjects</span> 
+					</div>
+
+					<div class="col s6 right">
+						 <a href='#addSubject' class="btn-floating btn-large waves-effect waves-light pink right modal-trigger"><i class="material-icons">add</i></a>
+					</div>
+				</div>
+				
+				<div class="row">
+				      <div class="col s3">
+				      	  <select id="course">
 						      <option value="" disabled selected>Sort by course</option>
 						      @foreach($courses as $course)
 						      	<option value="{{$course->course}}">{{$course->course}}</option>
 						      @endforeach
 						   </select>
 				      </div>
-				      <div class="col s4">
-				           <input placeholder="Search" id="first_name" type="text" class="validate">
+				       <div class="col s3">
+				       	   <select id="semester">
+						      <option value="" disabled selected>Sort by semester</option>
+						      <option value="1">1st semester</option>
+						      <option value="2">2nd semester</option>
+						      <option value="3">summer</option>
+						   </select>	
+				      </div>
+				      <div class="col s3">
+				       	 	  <select id="year">
+						       <option value="0" disabled selected>Sort by year</option>
+						       <option value="1">1st year</option>
+						       <option value="2">2nd year</option>
+						       <option value="3">3rd year</option>
+						       <option value="4">4th year</option>
+						   </select>
+				      </div>
+				      <div class="col s3">
+				           <input placeholder="Search" id="search" type="text" class="validate">
 				      </div>
 				</div> 
 
@@ -64,7 +86,7 @@
                                           @endif
                                     
                                      <td class="text-center">
-                                        <button   data-activates="options" class="btn-flat pink-text dropdown-button"
+                                        <button   data-activates="options" class="btn-flat pink-text dropdown-button subject"
                                         data-subject_id="{{$subject->subject_id}}"  
                                         data-subject="{{$subject->subject}}" 
                                         data-descriptive="{{$subject->descriptive}}"
@@ -91,7 +113,9 @@
 			       					{{ $subjects->links() }}
 			       			</div>
                       @else
-                           No subjects found
+                           <div class="row center">
+			       					<h5><span class="fa fa-search"></span> No subjects found.</h5>
+			       			</div>
                       @endif
 			</div>
 		</div>
@@ -103,8 +127,13 @@
  <div id="addSubject" class="modal modal-fixed-footer">
  {!! Form::open(['action' => 'AdminController@store_subject', 'method' => 'POST']) !!}
     <div class="modal-content">
-      <h5 class="center">Add subject</h5>
+      <h5 class="center"><span class="fa fa-book"></span> Add subject</h5>
       <br>
+      <div class="card blue darken-1 white-text">
+      	<div class="card-content center">
+      		<span class="fa fa-info-circle"></span> Total hours / Week will automatically calculated based on number of lectures, laboratory.
+      	</div>
+      </div>
 	    <div class="row">
 	        <div class="input-field col s6">
 	          <input id="subject" type="text" class="validate" name="subject" required>
@@ -124,7 +153,7 @@
 	        </div>
 
 	         <div class="input-field col s6">
-	          <input id="lab" type="number" class="validate" name="lab" required>
+	          <input id="lab" type="number" class="validate" name="lab" value="0" required>
 	          <label for="lab">Laboratory</label>
 	        </div>
         </div>
@@ -144,8 +173,8 @@
         <div class="row">
 	        <div class="input-field col s6">
 	           <select name="pre_req" required>
-			      <option value="0" disabled selected>Select subjects</option>
-			      <option value="0">None</option>
+			      <option value="None" disabled selected>Select subjects</option>
+			      <option value="None">None</option>
 				</select>
 	          <label for="pre_req">Pre requisites</label>
 	        </div>
@@ -172,6 +201,7 @@
 			      <option value="" disabled selected>Select semester</option>
 			      <option value="1">1st semester</option>
 			      <option value="2">2nd semester</option>
+			      <option value="3">Summer</option>
 				</select>
 	          <label for="semester">Semester</label>
 	        </div>
@@ -200,8 +230,87 @@
 
     </div>
     <div class="modal-footer">
-    	 <button type="submit" class="modal-action modal-close waves-effect waves-green btn-flat green-text">Add subject</button>
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+    	 <button type="submit" class="modal-action modal-close waves-effect waves-green btn green">Add subject</button>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn red ">Close</a>
+    </div>
+
+    {!! Form::close() !!}
+ </div>
+
+
+
+
+
+  <!-- View add schedule -->
+ <div id="addSchedule" class="modal modal-fixed-footer">
+ {!! Form::open(['action' => 'AdminController@store_schedule', 'method' => 'POST']) !!}
+    <div class="modal-content">
+      <h5 class="center" id="sched-title"></h5>
+      <br>
+      <input  id="subject_id" name="subject_id" type="hidden" class="validate">
+       <div class="card blue darken-1 white-text">
+      	<div class="card-content center">
+      		<span class="fa fa-info-circle"></span> Schedule will be added in current school year
+      	</div>
+      </div>
+   
+	    <div class="row">
+	        <div class="input-field col s6">
+	         <select name="schedule_day" required>
+			      <option value="" disabled selected>Select days</option>
+			      <option value="MTH">Monday - Thursday</option>
+			      <option value="TF">Tuesday - Friday</option>
+			      <option value="WED">Wednesday</option>
+			      <option value="SAT">Saturday</option>
+				</select>
+	          <label for="schedule_day">Schedule day:</label>
+	        </div>
+
+	        <div class="col s6">
+	          <label for="start_time">Start time:</label>
+	          <input id="start_time" type="time" class="validate" name="start_time" required>
+	        </div>
+        </div>
+
+        <div class="row">
+	         <div class="col s6">
+	          <label for="end_time">End time:</label>
+	          <input id="end_time" type="time" class="validate" name="end_time" required>
+	        </div>
+
+	         <div class="input-field col s6">
+	          <input id="room" type="text" class="validate" name="room" required>
+	          <label for="room">Room:</label>
+	        </div>
+        </div>
+
+         <div class="row">
+
+         	<div class="input-field col s6">
+	         <select name="semester" required>
+			      <option value="" disabled selected>Select semester</option>
+			      <option value="1">1st semester</option>
+			      <option value="2">2nd semester</option>
+			      <option value="3">summer</option>
+				</select>
+	          <label for="semester">Semester</label>
+	        </div>
+	         <div class="input-field col s6">
+	           <select name="faculty_id" required>
+			      <option value="" disabled selected>Select faculty</option>
+			       @foreach($faculties as $faculty)
+						<option value="{{$faculty->faculty_id}}">{{$faculty->faculty_name}}</option>
+				   @endforeach
+				</select>
+	          <label for="course_id">Assign faculty</label>
+	        </div>
+        </div>
+
+   
+    </div>
+    <div class="modal-footer">
+    	 <button type="submit" class="modal-action modal-close waves-effect waves-green btn green">Add schedule</button>
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn red ">Close</a>
     </div>
 
     {!! Form::close() !!}
@@ -210,23 +319,88 @@
 
   <!-- Subjects options -->
   <ul id='options' class='dropdown-content'>
-    <li><a href="#!">Edit</a></li>
+  	<li><a href='#addSchedule'  class="green-text center modal-trigger"><span class="fa fa-calendar-plus-o"></span></a></li>
     <li class="divider"></li>
-    <li><a href="#!">Remove</a></li>
+    <li><a href="#!" class="blue-text center"><span class="fa fa-pencil"></span></a></li>
     <li class="divider"></li>
-
+    <li><a href="#!" class="red-text center"><span class="fa fa-trash"></span></a></li>
+    <li class="divider"></li>
   </ul>
 
- @if(session('dialog_success'))
+ @if(session('success_subject'))
  	<script type="text/javascript">
  		 Materialize.toast('Subject successfully added!', 5000,'green');
  	</script>
  @endif
 
+  @if(session('error_subject'))
+ 	<script type="text/javascript">
+ 		 Materialize.toast('Subject not added successfully', 5000,'red');
+ 	</script>
+ @endif
+
+
+ @if(session('success_schedule'))
+ 	<script type="text/javascript">
+ 		 Materialize.toast('Schedule successfully added!', 5000,'green');
+ 	</script>
+ @endif
+
+  @if(session('error_schedule'))
+ 	<script type="text/javascript">
+ 		 Materialize.toast('Schedule not added successfully', 5000,'red');
+ 	</script>
+ @endif
+
+  @if(session('conflict_schedule'))
+ 	<script type="text/javascript">
+ 		 Materialize.toast('Schedule not added, conflict with another schedule.', 5000,'red');
+ 	</script>
+ @endif
+
+
+
 <script>
 	 $(document).ready(function() {
 
 	 	var url  = window.location.href;  
+
+	 	var c = localStorage.getItem('course');
+	 	var sem = localStorage.getItem('semester');
+	 	var y = localStorage.getItem('year')
+	 	var url      = window.location.href;  
+
+	 	if(c != null){
+			$( "#course" ).val(c)
+		
+		}
+		else{
+			$( "#course" ).val('0')
+		}
+
+		if(sem != null){
+			$( "#semester" ).val(sem)
+			
+			
+		}
+		else{
+			$( "#semester" ).val('0')
+		}
+
+		if(y != null){
+			$( "#year" ).val(y)
+			
+		}
+		else{
+			$( "#year" ).val('0')
+		}
+
+	 	$(".subject").click(function() {
+        	var id = $(this).data("subject_id");
+        	var subject = $(this).data("subject");
+        	$("#subject_id").val(id);
+        	$("#sched-title").text(subject + " - schedule");
+    	});
 
 	 	 $('.modal').modal();
    		 $('select').material_select();
@@ -248,14 +422,37 @@
          
         });
 
-
-         $( "#course" ).change(function() {
+        $( "#course" ).change(function() {
 
            var course = $(this).val();        	
-          // localStorage.setItem('year',year);    	
+           localStorage.setItem('course',course);    	
            window.location.href =	updateQueryStringParameter( url, 'course', course )
             
         });
+
+
+        $( "#semester" ).change(function() {
+
+           var semester = $(this).val();        	
+           localStorage.setItem('semester',semester);    	
+           window.location.href =	updateQueryStringParameter( url, 'semester', semester )
+            
+        });
+
+
+         $( "#year" ).change(function() {
+
+           var year = $(this).val();        	
+           localStorage.setItem('year',year);    	
+           window.location.href =	updateQueryStringParameter( url, 'year', year )
+            
+        });
+
+         $('#search').keypress(function (e) {
+		  if (e.which == 13) {
+		   	 window.location.href =	updateQueryStringParameter( url, 'search', $(this).val() )
+		  }
+		});
 
 
         function updateQueryStringParameter(uri, key, value) {

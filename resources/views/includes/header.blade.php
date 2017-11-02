@@ -10,11 +10,15 @@
 
               <li><a class="dropdown-button" href="#!" data-activates="logout"> <span class="fi-torso"></span> {{session('name')}} <i class="fa fa-caret-down" aria-hidden="true"></i></a></li>
 
+              <li><a href="#" class="sy"><span class="fa fa-calendar"></span> School year: {{$school_year}} </a></li>
+
             @endif
 
             @if(session('type') == 2) <!-- Coordinator -->
 
-              <li><a class="dropdown-button" href="#!" data-activates="logout"> <span class="fi-torso"></span> User <i class="fa fa-caret-down" aria-hidden="true"></i></a></li>
+              <li><a class="dropdown-button" href="#!" data-activates="logout"> <span class="fi-torso"></span> {{session('name')}} <i class="fa fa-caret-down" aria-hidden="true"></i></a></li>
+
+              <li><a href="#" class="sy"><span class="fa fa-calendar"></span> School year: {{$school_year}} </a></li>
 
             @endif
 
@@ -23,8 +27,12 @@
                 <li><a href="{{url('/')}}"><span class="fi-home"></span> Home</a></li>
 
                 <li><a href="{{url('subjects')}}/{{session('course')}}"><i class="fa fa-book" aria-hidden="true"></i> Subjects Offered </a></li>
+
+                <li><a href="{{url('schedules')}}/{{session('course')}}"><i class="fa fa-calendar" aria-hidden="true"></i> Schedules </a></li>
                 
                 <li><a class="dropdown-button" href="#!" data-activates="userdrop"> <span class="fi-torso"></span> {{session('name')}} <i class="fa fa-caret-down" aria-hidden="true"></i></a></li>
+
+                <li><a href="#" class="sy"><span class="fa fa-calendar"></span> School year: {{$school_year}} </a></li>
 
             @endif
 
@@ -61,8 +69,6 @@
         <li><a href="#"><span class="fi-clipboard-pencil"></span> Enrollment </a></li>
 
         <li><a href="#"><span class="fi-list"></span> Courses offered </a></li>
-
-
 
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>

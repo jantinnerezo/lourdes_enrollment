@@ -126,6 +126,28 @@ select option{
     height: 100px !important;
 }
 
+.coordinator .student{
+
+    overflow-y: scroll;
+    height: 70vh;
+
+}
+
+.coordinator .collection a.collection-item {
+  
+    color: #333 !important;
+}
+
+.coordinator .collection a.collection-item:not(.active):hover {
+    background-color: #e91e63 !important;
+    color: #fff !important;
+}
+
+.coordinator img.responsive-img, video.responsive-video {
+    max-width: 100px !important;
+    height: 100px !important;
+}
+
 .dashboard .fi-torso{
 
 	font-size: 15rem !important;
@@ -144,6 +166,17 @@ span.badge.new {
     font-size: 1.2rem !important;
     padding: 0 10px !important;
     line-height: 30px !important;
+}
+
+.sy{
+
+    background-color: #e91e63 !important;
+    color: #fff !important;
+}
+.sy:hover{
+
+    background-color: #e91e63 !important;
+    color: #fff !important;
 }
 
 

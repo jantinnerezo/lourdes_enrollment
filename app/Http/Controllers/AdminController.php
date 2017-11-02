@@ -14,7 +14,7 @@ class AdminController extends Controller
 {
 
 	// Fetch all students - verified and unverified
-    public function students(Request $request,$username){
+    public function students(Request $request){
 
     	if(session('logged_in') == true){
             if(session('type') == 1){
@@ -44,7 +44,7 @@ class AdminController extends Controller
 
 
     // Fetch all students - verified and unverified
-    public function student(Request $request,$username,$email){
+    public function student(Request $request,$email){
 
     	if(session('logged_in') == true){
             if(session('type') == 1){
@@ -72,15 +72,21 @@ class AdminController extends Controller
 
 
     // Fetch All Subjects
-     public function subjects(Request $request,$username){
+     public function subjects(Request $request){
 
     	if(session('logged_in') == true){
             if(session('type') == 1){
 
             	$database = new Database();
+
             	$course = $request->course;
+                $semester = $request->semester;
+                $year = $request->year;
+                $search = $request->search;
+
             	$data['courses'] = $database->fetchCourses(); // Course list
-            	$data['subjects'] = $database->fetchSubjects($course); // Course list
+            	$data['subjects'] = $database->fetchSubjects($semester,$year,$search,$course); 
+                $data['faculties'] = $database->fetchFaculty();
 		        return view('administrator.subjects',$data);
 
             }
@@ -125,14 +131,133 @@ class AdminController extends Controller
         $inserted = $database->insertSubject($data);
 
         if($inserted){
-        	 return redirect('account/registrar/'.$username.'/subjects')->with('dialog_success',true);
+        	 return redirect('account/registrar/subjects')->with('success_subject',true);
         }else{
-        	 return redirect('account/registrar/'.$username.'/subjects')->with("Error");
+        	 return redirect('account/registrar/subjects')->with("error_subject",true);
         }
-
-      
      
     }
+
+
+
+     // Fetch Faculty
+     public function faculties(){
+
+        if(session('logged_in') == true){
+            if(session('type') == 1){
+
+                $database = new Database();
+                $data['faculties'] = $database->fetchFaculty();
+                return view('administrator.faculties',$data);
+
+            }
+            if(session('type') == 2){
+
+                return redirect('user/login');
+            }
+            else{
+
+                return redirect('login'); 
+            }
+        }
+        else{
+
+            return redirect('user/login');
+
+        }
+    }
+
+    public function store_faculty(Request $request)
+    {
+     
+        $database = new Database();
+        $data = array(
+                    'faculty_name'  => $request->input('faculty_name'),
+         );
+
+      
+        $inserted = $database->insertFaculty($data);
+
+        if($inserted){
+             return redirect('account/registrar/faculties')->with('success',true);
+        }else{
+             return redirect('account/registrar/faculties')->with("error",true);
+        }
+     
+    }
+
+
+
+     // Fetch schedules
+     public function schedules(){
+
+        if(session('logged_in') == true){
+            if(session('type') == 1){
+
+                $database = new Database();
+                $data['schedules'] = $database->fetchSchedules();
+                $data['sy'] = $database->fetchYear();
+                return view('administrator.schedules',$data);
+
+            }
+            if(session('type') == 2){
+
+                return redirect('user/login');
+            }
+            else{
+
+                return redirect('login'); 
+            }
+        }
+        else{
+
+            return redirect('user/login');
+
+        }
+    }
+
+
+
+
+    public function store_schedule(Request $request)
+    {
+
+        $database = new Database();
+
+        $first = Date('Y');
+        $second = Date('Y',strtotime('+1 Year'));
+        $school_year = $first.'-'.$second;
+
+
+        $data = array(
+            'schedule_day' => $request->input('schedule_day'),
+            'school_year' => $school_year,
+            'start_time' => $request->input('start_time'),
+            'end_time' => $request->input('end_time'),
+            'semester' => $request->input('semester'),
+            'subject_id' => $request->input('subject_id'),
+            'room' => $request->input('room'),
+            'faculty_id' => $request->input('faculty_id')
+        );
+
+        $conflicted = $database->checkSchedConflict($request->input('schedule_day'),$request->input('start_time'),$request->input('semester'),$school_year,$request->input('room'));
+
+        if($conflicted){
+            return redirect('account/registrar/subjects')->with("conflict_schedule",true);
+        }else{
+
+             $inserted = $database->insertSchedule($data);
+
+             if($inserted){
+                 return redirect('account/registrar/subjects')->with('success_schedule',true);
+             }else{
+                 return redirect('account/registrar/subjects')->with("error_schedule",true);
+             }
+        }
+       
+     
+    }
+
 
 
 
@@ -165,7 +290,7 @@ class AdminController extends Controller
          
 	        }catch(\Exception $e){
 
-	            return redirect('account/registrar/'.$username.'/students')->with('error', 'Registration unsuccessful, cannot send email because there is no internet connection. Please try again later. ');
+	            return redirect('account/registrar/students')->with('error', 'Registration unsuccessful, cannot send email because there is no internet connection. Please try again later. ');
 
 	        }
 		

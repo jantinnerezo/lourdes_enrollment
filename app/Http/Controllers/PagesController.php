@@ -21,7 +21,7 @@ class PagesController extends Controller
             if(session('type') == 1){
 
                 $username = session('username');
-                return redirect('account/registrar/'.$username.'/dashboard');  
+                return redirect('account/registrar/students');  
             }
             if(session('type') == 2){
 
@@ -51,7 +51,7 @@ class PagesController extends Controller
             if(session('type') == 1){
 
                 $username = session('username');
-                return redirect('account/registrar/'.$username.'/dashboard');  
+                return redirect('account/registrar/students');  
             }
             if(session('type') == 2){
 
@@ -67,7 +67,7 @@ class PagesController extends Controller
             $database = new Database();
             return view('pages.user'); // return to registration page
 
-            }
+        }
        
       
         
@@ -104,6 +104,7 @@ class PagesController extends Controller
                             'course' => $course,
                             'year' => $year,
                             'urlname' => $urlname,
+                            'enrolled' => $logged->enrolled,
                             'logged_in' => true
                         );
 
@@ -161,7 +162,33 @@ class PagesController extends Controller
                          // Store userdata array to session
                          $request->session()->put($userdata);
 
-                         return redirect('account/registrar/'.$username.'/dashboard');  
+                         return redirect('account/registrar/students');  
+
+
+                    }else{
+
+                         $username = $logged->username;
+                         $name = $logged->name;
+                         $course_id = $logged->course_id;
+                         $img = $logged->img;
+                         $user_type = $logged->user_type;
+
+                          $userdata = array(
+                            'username' => $username,
+                            'name' => $name,
+                            'type' => $user_type,
+                            'type_long' => 'Coordinator',
+                            'course_id' => $course_id,
+                            'img' => $img,
+                            'course' =>  $logged->course,
+                            'logged_in' => true
+                        );
+
+
+                         // Store userdata array to session
+                         $request->session()->put($userdata);
+
+                         return redirect('account/coordinator/coordinator');  
                     }
                        
   
@@ -170,7 +197,8 @@ class PagesController extends Controller
                     return redirect('user/login')->with('error', 'Username or password is incorrect!');
 
                 }
-        }
+                    }
+        
 
     
 
@@ -286,7 +314,7 @@ class PagesController extends Controller
     // Log the user out to the site
     public function logout(Request $request){
 
-        $userdata = array('email','name,','type','course_id','course','year','urlname','type_long','logged_in','img','username');
+        $userdata = array('email','name,','type','course_id','course','year','urlname','type_long','logged_in','img','username','enrolled');
 
         $request->session()->forget($userdata);
         return redirect('login');

@@ -8,7 +8,7 @@
 		<div class="card">
 			<div class="card-content">
 
-				<span class="card-title center"><i class="fa fa-book" aria-hidden="true"></i> {{session('course')}}-{{session('year')}} Subjects</span>
+				<span class="card-title center"><i class="fa fa-book" aria-hidden="true"></i> {{session('course')}} Subjects  </span>
 				<br>
 				<div class="row">
 				      <div class="col s4">
@@ -28,7 +28,7 @@
 						   </select>
 				      </div>
 				      <div class="col s4">
-				           <input placeholder="Search" id="first_name" type="text" class="validate">
+				           <input placeholder="Search" id="search" type="text" class="validate">
 				      </div>
 				</div> 
 				<br>
@@ -62,7 +62,9 @@
 			       		{{ $subjects->links() }}
 			       </div>
 			      @else
-			           No subjects found
+			           <div class="row center">
+			       					<p><span class="fa fa-search"></span> No subjects found.</p>
+			       			</div>
 			      @endif
 			</div>
 		</div>
@@ -109,6 +111,12 @@
            window.location.href =	updateQueryStringParameter( url, 'year', year )
             
         });
+
+         $('#search').keypress(function (e) {
+		  if (e.which == 13) {
+		   	 window.location.href =	updateQueryStringParameter( url, 'search', $(this).val() )
+		  }
+		});
 
         function updateQueryStringParameter(uri, key, value) {
 			  var re = new RegExp("([?&])" + key + "=.*?(&|#|$)", "i");

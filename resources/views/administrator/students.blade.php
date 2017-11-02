@@ -51,7 +51,7 @@
 
 							        <tbody>
 							        	@foreach($verified as $student)
-							        	  <tr class="clickable-row" data-href="{{url('account/registrar')}}/{{session('username')}}/students/{{$student->email}}">
+							        	  <tr class="clickable-row" data-href="{{url('account/registrar')}}/students/{{$student->email}}">
 								            <td>{{$student->firstname}} {{$student->middlename}}. {{$student->lastname}}</td>
 								            <td>{{$student->course}}-{{$student->year_level}}</td>
 								            <td>{{$student->email}}</td>
