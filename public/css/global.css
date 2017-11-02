@@ -1,0 +1,150 @@
+/*  Global Styles */
+body{
+
+	background-color:#f4f4f4 !important;
+}
+
+nav .brand-logo {
+    padding: 10px !important;
+}
+
+nav ul a {
+  
+    color: #333 !important;
+    
+}
+nav ul a:hover {
+    background-color: #333 !important;
+    color: #fff !important;
+}
+
+.light {
+    background-color: #fff !important;
+    
+}
+
+ /* label focus color */
+.input-field input[type=text]:focus + label {
+ color: #e91e63 !important;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus {
+ border-bottom: 1px solid  #e91e63 !important;
+ box-shadow: 0 1px 0 0 #e91e63!important;
+}
+
+select option{
+
+	color:#e91e63 !important;
+}
+
+.picker__date-display {
+   
+    background-color: #e91e63 !important;
+   
+}
+
+.picker__day--selected, .picker__day--selected:hover, .picker--focused .picker__day--selected {
+  
+    background-color: #e91e63 !important;
+   
+}
+
+
+/* Home */
+
+.showcase{
+
+	background-image: url('../img/background.jpg');
+	background-size:cover;
+	background-position:center;
+	height:100vh;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	justify-content: center;
+}
+.showcase .card{
+
+	width:28%;
+}
+.courses h3{
+
+	padding: 20px;
+}
+
+.courses img{
+	width: 200px;
+    height: 200px;
+    border: 4px solid #e91e63;
+}
+
+.courses img:hover{
+
+	border: 4px solid #0089ec;
+    transition: 0.2s;
+}
+
+.showcase .collection a.collection-item {
+  
+    color: #333 !important;
+}
+
+.showcase .collection a.collection-item:not(.active):hover {
+	background-color: #e91e63 !important;
+    color: #fff !important;
+}
+
+
+
+/* Register */
+
+.fields{
+
+	padding: 0 20px 0 20px;
+}
+
+
+/* Profile */
+
+.sidenav .collection-item {
+ 
+    border-bottom: 0 !important;
+}
+.profile .collection a.collection-item {
+  
+    color: #333 !important;
+}
+
+.profile .collection a.collection-item:not(.active):hover {
+	background-color: #e91e63 !important;
+    color: #fff !important;
+}
+
+.profile img.responsive-img, video.responsive-video {
+    max-width: 100px !important;
+    height: 100px !important;
+}
+
+.dashboard .fi-torso{
+
+	font-size: 15rem !important;
+}
+
+span.badge.new {
+  
+    background-color: #f44336 !important;
+   
+}
+
+.pagination li.active{
+
+	color: #fff !important;
+    display: inline-block !important;
+    font-size: 1.2rem !important;
+    padding: 0 10px !important;
+    line-height: 30px !important;
+}
+
+
+
