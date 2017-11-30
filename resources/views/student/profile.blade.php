@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+<br>
 <div class="row profile">
 
 	<div class="col s3">
@@ -7,12 +8,25 @@
 	</div>
 
 	<div class="col s9">
-		<div class="card">
+			<div class="ui info message">
+				  <div class="content">
+				    <div class="header">
+				     	<i class="fa fa-circle green-text" aria-hidden="true"></i>  Welcome {{$information->firstname}} {{$information->lastname}}
+				    </div>
+				  </div>
+				</div>
+		<div class="card attached">
+			<div class="ui attached message ">
+				  <div class="content">
+				    <div class="header">
+				    	<span class="fa fa-user"></span> Account Information
+				    </div>
+				  </div>
+			</div>
 			<div class="card-content">
-				<span class="card-title"><i class="fa fa-circle green-text" aria-hidden="true"></i> Welcome {{$information->firstname}} {{$information->lastname}} ! </span>
-
-				<span class="card-title center">Account Information</span>
-				  <ul class="collection">
+			
+			
+				  <ul class="collection attached">
 				      <li class="collection-item">First Name: {{$information->firstname}} </li>
 				      <li class="collection-item">Middle Name: {{$information->middlename}}</li>
 				      <li class="collection-item">Last Name: {{$information->lastname}}</li>

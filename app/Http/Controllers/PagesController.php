@@ -29,7 +29,7 @@ class PagesController extends Controller
             else{
 
                $urlname = session('urlname');
-               return redirect('account/student/profile/'.$urlname); 
+               return redirect('account/student/notifications/'.$urlname); 
             }
         }
         else{
@@ -59,13 +59,13 @@ class PagesController extends Controller
             else{
 
                $urlname = session('urlname');
-               return redirect('account/student/profile/'.$urlname); 
+               return redirect('account/student/notifications/'.$urlname); 
             }
         }
         else{
 
             $database = new Database();
-            return view('pages.user'); // return to registration page
+            return view('pages.login'); // return to registration page
 
         }
        
@@ -112,7 +112,7 @@ class PagesController extends Controller
                          // Store userdata array to session
                          $request->session()->put($userdata);
 
-                         return redirect('account/student/profile/'.$urlname); 
+                         return redirect('account/student/notifications/'.$urlname); 
 
 
                     }else{
@@ -144,7 +144,6 @@ class PagesController extends Controller
                         $username = $logged->username;
                         $name = $logged->name;
                         $course_id = $logged->course_id;
-                        $img = $logged->img;
                         $user_type = $logged->user_type;
 
                         // Store user data as an array
@@ -154,7 +153,6 @@ class PagesController extends Controller
                             'type' => $user_type,
                             'type_long' => 'Registrar',
                             'course_id' => $course_id,
-                            'img' => $img,
                             'logged_in' => true
                         );
 
@@ -170,7 +168,6 @@ class PagesController extends Controller
                          $username = $logged->username;
                          $name = $logged->name;
                          $course_id = $logged->course_id;
-                         $img = $logged->img;
                          $user_type = $logged->user_type;
 
                           $userdata = array(
@@ -179,7 +176,6 @@ class PagesController extends Controller
                             'type' => $user_type,
                             'type_long' => 'Coordinator',
                             'course_id' => $course_id,
-                            'img' => $img,
                             'course' =>  $logged->course,
                             'logged_in' => true
                         );
@@ -225,7 +221,7 @@ class PagesController extends Controller
        
 
         // Get date enrolled
-        $token = str_random(10);
+        $token = str_random(5);
         $year_enrolled = Date('Y');
         $raw = $request->input('firstname') .$request->input('lastname').$token.$year_enrolled;
         $date_enrolled = Date('Y-m-d');
@@ -320,57 +316,37 @@ class PagesController extends Controller
         return redirect('login');
     }
 
+    // Subjects in each course
+   public function subjects(Request $request, $course){
 
-    // Dump
+         if(session('logged_in') == true){
+            if(session('type') == 1){
 
-    /*
+               return redirect('user/login');
 
-        $data['email'] = $request->input('email');
-        $data['name'] = $request->input('firstname');
-        $data['password'] = $raw;
-        $email = $request->input('email');
-        
-        try{
-
-
-            // Check if email existed
-            $existed = $database->checkIfExist($email);
-
-            if($existed){
-
-                return redirect('registration')->with('error', "Email address already exist! It looks like you've already created an account.");
-
-            }else{
-
-                $inserted = $database->newStudent($inputs);
-                if($inserted){
-
-                    Mail::send('emails.confirm', $data, function($message) use($data) {
-                        $message->to($data['email']);
-                        $message->subject('Lourdes College BUSAC-IT Enrollment - Enrollment Registration Response');
-
-                     });
-
-                     return redirect('registration')->with('success', 'Registration successful, The office of registrar of Lourdes College will review the information you submitted and will send you an email confirmation with password to be able to login and proceed to the enrollment. Thank you!');
-
-                }else{
-
-                     return redirect('registration')->with('error', 'Registration unsuccessful, cannot send email because there is no internet connection. Please try again later.');
-                }
-
-        
             }
+            if(session('type') == 2){
 
-            
+                return redirect('user/login');
+            }
+            else{
 
-        }catch(\Exception $e){
+               return redirect('login');
+            }
+        }
+        else{
 
-            return redirect('registration')->with('error', 'Registration unsuccessful, cannot send email because there is no internet connection. Please try again later. ');
+            $database = new Database();
+
+            $semester = $request->semester;
+            $year = $request->year;
+            $search = $request->search;
+            $data['course'] = $course;
+            $data['subjects'] = $database->fetchSubjects($semester,$year,$search,$course); // Course list
+            return view('pages.subjects',$data);
 
         }
-
-
-    */
+   }
 
 
 }

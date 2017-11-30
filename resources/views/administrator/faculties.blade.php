@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+<br>	
 <div class="row profile">
 
 	<div class="col s3">
@@ -7,10 +8,20 @@
 	</div>
 
 	<div class="col s9">
-		<div class="card">	
+		<div class="card attached">	
+			<div class="ui attached message">
+			  <div class="header pink-text">
+			  	@if(count($faculties) > 0)
+					 <i class="fa fa-users" aria-hidden="true"></i> Faculties ({{count($faculties)}})
+				@else
+					<i class="fa fa-users" aria-hidden="true"></i> Faculties (0)
+				@endif
+			  </div> 
+			  <p>All faculties</p>
+			</div>
 			<div class="card-content">
-		
-				<span class="card-title"><i class="fa fa-users" aria-hidden="true"></i> Faculty </span>
+				
+				@include('includes.message')
 				<br>
 				<div class="row">
 				      <div class="col s4">
@@ -29,7 +40,7 @@
 
                      	@foreach($faculties as $faculty)
 
-                 		   <li class="collection-item"><div><i class="material-icons left">person</i> {{$faculty->faculty_name}}<a href="#!" class="secondary-content"> <i class="fa fa-book" aria-hidden="true"></i> View subjects</a></div></li>
+                 		   <li class="collection-item"><div><i class="material-icons left">person</i> {{$faculty->faculty_name}}<a href="{{url('account/registrar/faculties/onremove?faculty_id=')}}{{$faculty->faculty_id}} " class="secondary-content red-text"> <i class="fa fa-trash" aria-hidden="true"></i> Remove</a></div></li>
 
                      	@endforeach
 				     
@@ -66,23 +77,20 @@
     {!! Form::close() !!}
  </div>
 
- @if(session('success'))
- 	<script type="text/javascript">
- 		 Materialize.toast('Faculty successfully added!', 5000,'green');
- 	</script>
- @endif
-
- @if(session('error'))
- 	<script type="text/javascript">
- 		 Materialize.toast('Faculty not added, something went wrong!', 5000,'red');
- 	</script>
- @endif
+ 
 
 
 <script>
 	 $(document).ready(function() {
 
 		 $('.modal').modal();
+
+		var url      = window.location.href;  
+		$('#search').keypress(function (e) {
+		  if (e.which == 13) {
+		   	 window.location.href =	updateQueryStringParameter( url, 'search', $(this).val())
+		  }
+		});
 
         function updateQueryStringParameter(uri, key, value) {
 			  var re = new RegExp("([?&])" + key + "=.*?(&|#|$)", "i");

@@ -3,24 +3,28 @@
 
 @section('content')
 	
-	<div class="container">
-
-		<div class="card">
+	<div class="container mtop">
+		
+		<div class="card attached">
+			<div class="ui attached message">
+		  <div class="header pink-text">
+		   	<i class="fa fa-file-text" aria-hidden="true"></i> {{session('course')}} Prospectus
+		  </div>
+		  <p>View all subjects in your course from 1st year to 4th year.</p>
+		</div>
 			<div class="card-content">
 
-				<span class="card-title center"><i class="fa fa-book" aria-hidden="true"></i> {{session('course')}} Subjects  </span>
-				<br>
 				<div class="row">
 				      <div class="col s4">
 				      	  <select id="semester">
-						      <option value="0" disabled selected>Sort by semester</option>
+						      <option value="" disabled selected>Sort by semester</option>
 						      <option value="1">1st semester</option>
 						      <option value="2">2nd semester</option>
 						   </select>
 				      </div>
 				      <div class="col s4">
 				       	  <select id="year">
-						       <option value="0" disabled selected>Sort by year</option>
+						       <option value="" disabled selected>Sort by year</option>
 						       <option value="1">1st year</option>
 						       <option value="2">2nd year</option>
 						       <option value="3">3rd year</option>
@@ -31,9 +35,9 @@
 				           <input placeholder="Search" id="search" type="text" class="validate">
 				      </div>
 				</div> 
-				<br>
+			
 					@if(count($subjects) > 0)
-			            <table class="striped">
+			            <table class="ui celled padded table">
 			              <thead>
 			                  <th>Subject</th>
 			                  <th>Descriptive title</th>
@@ -62,9 +66,11 @@
 			       		{{ $subjects->links() }}
 			       </div>
 			      @else
-			           <div class="row center">
-			       					<p><span class="fa fa-search"></span> No subjects found.</p>
-			       			</div>
+			         	<div class="row center">
+			         		 <div class="ui warning message">
+  									<p><i class="fa fa-search" aria-hidden="true"></i> No subjects to show.</p>
+					  		</div>
+			         	</div>		
 			      @endif
 			</div>
 		</div>

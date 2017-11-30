@@ -2,19 +2,19 @@
 
 @section('content')
 
-	<div class="container">
+	<div class="container register">
 		<div class="card">
 			  <div class="card-action">
                	 <h5><i class="fa fa-file-text-o" aria-hidden="true"></i> Registration Form</h5>
               </div>
 
-            @include('includes.message')
+          
 
          
          {!! Form::open(['action' => 'PagesController@submit_form', 'method' => 'POST','enctype' => 'multipart/form-data'],['files' => true]) !!}
 
 			<div class="card-content">
-
+				  @include('includes.message')
 				<h1 class="card-title center blue-text">Please Fill-up the form</h1>
 
 				 <div class="row fields">
@@ -177,8 +177,8 @@
 
 
 			</div>
-			 <div class="card-action">
-               	<button class="btn waves-effect waves-light light-green darken-3" type="submit" name="action"><i class="fa fa-paper-plane" aria-hidden="true"></i> Submit Form
+			 <div class="card-action center">
+               	<button class="large positive ui button" type="submit" name="action"><i class="fa fa-paper-plane" aria-hidden="true"></i> Submit Form
   						  </button>
             </div>
 
@@ -194,7 +194,7 @@
 
    		  $('.datepicker').pickadate({
 		    selectMonths: true, // Creates a dropdown to control month
-		    selectYears: 15, // Creates a dropdown of 15 years to control year,
+		    selectYears: 80, // Creates a dropdown of 15 years to control year,
 		    today: 'Today',
 		    clear: 'Clear',
 		    close: 'Ok',

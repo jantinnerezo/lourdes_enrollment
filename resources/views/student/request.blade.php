@@ -2,7 +2,7 @@
 
 
 @section('content')
-
+<br>
 <div class="row profile">
 
 	<div class="col s3">
@@ -11,14 +11,19 @@
 
 	<div class="col s9">
 
-		<div class="card">
+		<div class="card attached">
+			<div class="ui message attached">
+				  <div class="content">
+				    <div class="header">
+				      <i class="fa fa-exchange" aria-hidden="true"></i> Enrollment Request 
+				    </div>
+				  </div>
+				</div>
 			<div class="card-content">
 
-				<span class="card-title center"><i class="fa fa-exchange" aria-hidden="true"></i> Requested Subjects  </span>
-				<br>
 					@include('includes.message')
 					@if(count($schedules) > 0)
-			            <table class="striped">
+			            <table class="ui celled padded table attached">
 		                  <thead>
                               <th>Schedule Day</th>
                               <th>Time</th>
@@ -38,7 +43,7 @@
                                      <td>{{$schedule->faculty_name}}</td>
                                    {!! Form::open(['action' => 'StudentController@cancel_request', 'method' => 'POST'],['id' => 'verify-form']) !!}
                                     
-                                   	 	<td id="checkboxes"><p>
+                                   	 	<td id="checkboxes"><p class="center">
 									      <input type="checkbox" class="verify-check" id="{{$schedule->request_id}}" name="request_id[]" value="{{$schedule->request_id}}" />
 									      <label for="{{$schedule->request_id}}"></label>
 									   </p></td>
@@ -53,9 +58,13 @@
 			       		{{ $schedules->links() }}
 			       </div>
 			      @else
-			           <div class="row center">
-			       					<p> No requested subjects yet.</p>
-			       			</div>
+			          <div class="ui message warning">
+					  <div class="content">
+					    <div class="header">
+					      No Enrollment Request yet
+					    </div>
+					  </div>
+					</div>
 			      @endif
 			</div>
 		</div>

@@ -25,31 +25,29 @@
 
   <div class="container" >
     <div class="section">
-
       <div class="row courses">
           <h3 class="center"><i class="fa fa-graduation-cap" aria-hidden="true"></i> Courses Offered</h3>
         <div class="col s12 m4">
           <div class="icon-block center">
-              <a href=""><img class="circle" src="{{asset('img/accountancy.jpeg')}}"></a>
+              <a href="{{url('courses')}}/BSA?semester=1&year=1"><img class="circle" src="{{asset('img/accountancy.jpeg')}}"></a>
               <h5 class="center">Accountancy</h5>
           </div>
         </div>
 
         <div class="col s12 m4">
           <div class="icon-block center">
-              <a href=""><img class="circle" src="{{asset('img/it.jpeg')}}"></a>
+              <a href="{{url('courses')}}/BSIT?semester=1&year=1"><img class="circle" src="{{asset('img/it.jpeg')}}"></a>
               <h5 class="center">Information Technology</h5>
           </div>
         </div>
 
         <div class="col s12 m4">
           <div class="icon-block center">
-              <a href=""><img class="circle" src="{{asset('img/marketing.jpeg')}}"></a>
+              <a href="{{url('courses')}}/BSBA?semester=1&year=1"><img class="circle" src="{{asset('img/marketing.jpeg')}}"></a>
               <h5 class="center">Marketing and Finance</h5>
           </div>
         </div>
       </div>
-
     </div>
     <br><br>
   </div>

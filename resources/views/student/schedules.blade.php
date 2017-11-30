@@ -3,17 +3,21 @@
 
 @section('content')
 	
-	<div class="container">
-
-		<div class="card">
+	<div class="container mtop">
+		
+		<div class="card attached">
+			<div class="ui attached message">
+		  <div class="header pink-text">
+		   	<i class="fa fa-book" aria-hidden="true"></i> {{session('course')}}-{{session('year')}} schedules 
+		  </div>
+		  <p>Schedules are automatically filtered depending on your course and year to limit the data shown on the table.</p>
+		</div>
 			<div class="card-content">
+				
 
-				<span class="card-title center"><i class="fa fa-book" aria-hidden="true"></i> {{session('course')}}-{{session('year')}} schedules  </span>
-				<br>
-				@include('includes.message')
 				<div class="row">
 				      <div class="col s4">
-				       	   <select id="schedule_day" required>
+				       	   <select id="day" required>
 						      <option value="" disabled selected>Select days</option>
 						      <option value="MTH">Monday - Thursday</option>
 						      <option value="TF">Tuesday - Friday</option>
@@ -22,23 +26,24 @@
 							</select>
 				      </div>
 				      <div class="col s4">
-				          <select id="semester">
-						      <option value="" disabled selected>Sort by semester</option>
-						      <option value="1">1st semester</option>
-						      <option value="2">2nd semester</option>
-						      <option value="3">summer</option>
-						   </select>
+				         
 				      </div>
 				      <div class="col s4">
 				           <input placeholder="Search" id="search" type="text" class="validate">
 				      </div>
 				</div> 
-
-				
-				 	<br>
-
+				@include('includes.message')
 					@if(count($schedules) > 0)
-			            <table class="striped">
+
+					
+						<br>
+						<div class="ui attached message">
+						  <div class="header">
+						   	How to enroll?
+						  </div>
+						  <p>Simply check the checkboxes of the choosen schedules and click the enroll button</p>
+						</div>
+			            <table class="ui celled padded table attached">
 		                  <thead>
                               <th>Schedule Day</th>
                               <th>Time</th>
@@ -58,31 +63,48 @@
                                      <td>{{$schedule->room}}</td>
                                      <td>{{$schedule->faculty_name}}</td>
                                     
-                                      @if($schedule->status == 0)
-                                        <td class="text-light bg-danger">Close</td>
+                                      @if($schedule->slots > 0)
+                                        <td class="white-text green">Open</td>
                                       @else
-                                        <td class="text-light bg-success">Open</td>
+                                        <td class="white-text red">Close</td>
                                       @endif
                                 {!! Form::open(['action' => 'StudentController@submit_enrollment', 'method' => 'POST'],['id' => 'verify-form']) !!}
-                                   	 	<td id="checkboxes"><p>
-									      <input type="checkbox" class="verify-check" id="{{$schedule->schedule_id}}" name="schedule_id[]" value="{{$schedule->schedule_id}}" />
+
+                                	  @if($schedule->slots > 0)
+                                	  	 <td id="checkboxes" class="center-align"><p class="center-align">
+									      <input type="checkbox" class="verify-check center-align" id="{{$schedule->schedule_id}}" name="schedule_id[]" value="{{$schedule->schedule_id}}" />
 									      <label for="{{$schedule->schedule_id}}"></label>
 									   </p></td>
+                                	  @else
+                                	  	<td>
+                                	  		<h5 class="red-text center-align"><span class="fa fa-ban"></span></h5>
+									   </td>
+                                	  @endif
+                                   	 	
 								
                                   </tr>
                               @endforeach
 			              </tbody>
 			            </table>
-
-			            	<div class="card-action right buttons"><button type="submit" class="waves-effect waves-light btn green"><i class="material-icons left">check</i>Enroll</button></div>
+			            	<div class="ui negative message confirmation">
+								  <div class="header">
+								   	Are you sure you want to submit subjects?
+								  </div>
+							
+						        <br>
+						        <button type="submit" name="rejected" class="waves-effect waves-light btn green"><i class="material-icons left">check</i>Yes</button> <a class="waves-effect waves-light btn red cancel"><i class="material-icons left">close</i>Cancel</a> 
+						</div>
+			            	<div class="card-action right buttons"><a  class="waves-effect waves-light btn green submit"><i class="material-icons left">check</i>Submit</a></div>
 			            	 {!! Form::close() !!}
 			       <div class="row center">
 			       		{{ $schedules->links() }}
 			       </div>
 			      @else
 			           <div class="row center">
-			       					<p><span class="fa fa-search"></span> No schedules posted yet.</p>
-			       			</div>
+			         		 <div class="ui warning message">
+  									<p><i class="fa fa-search" aria-hidden="true"></i> No schedules posted yet.</p>
+					  		</div>
+			         	</div>	
 			      @endif
 			</div>
 		</div>
@@ -91,6 +113,21 @@
 <script>
 	 $(document).ready(function() {
 	 	 $('.buttons').hide();
+	 	 $('.confirmation').hide();
+
+	 	$( ".submit" ).click(function() {
+
+         	$('.confirmation').show();
+         	$('.submit').hide();
+            
+        });
+
+        $( ".cancel" ).click(function() {
+
+         	$('.confirmation').hide();
+         	$('.submit').show();
+            
+        });
 	 	var sem = localStorage.getItem('semester');
 	 	var y = localStorage.getItem('year')
 	 	var url      = window.location.href;  
@@ -123,25 +160,18 @@
 			    }
 	    });
 
-        $( "#semester" ).change(function() {
+        $( "#day" ).change(function() {
 
-           var semester = $(this).val();    
-           localStorage.setItem('semester',semester);    	
-           window.location.href =	updateQueryStringParameter( url, 'semester', semester )
+           window.location.href = "?day=" + $(this).val();
             
         });
 
-         $( "#year" ).change(function() {
-
-           var year = $(this).val();        	
-           localStorage.setItem('year',year);    	
-           window.location.href =	updateQueryStringParameter( url, 'year', year )
-            
-        });
 
          $('#search').keypress(function (e) {
 		  if (e.which == 13) {
-		   	 window.location.href =	updateQueryStringParameter( url, 'search', $(this).val() )
+
+		  	 window.location.href = "?search=" + $(this).val();
+		   	
 		  }
 		});
 

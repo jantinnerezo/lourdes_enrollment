@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+<br>
 <div class="row profile">
 
 	<div class="col s3">
@@ -7,15 +8,35 @@
 	</div>
 
 	<div class="col s9">
-		<div class="card">
-			
+
+		<div class="card attached">
+		<div class="ui attached message">
+		  <div class="header pink-text">
+		  	@if(count($all) > 0)
+				 <i class="fa fa-users" aria-hidden="true"></i> Students ({{count($all)}})
+			@else
+				<i class="fa fa-users" aria-hidden="true"></i> Students (0)
+			@endif
+		  </div> 
+		</div>
+		
 			<div class="card-content">
-				<span class="card-title"><i class="fa fa-users" aria-hidden="true"></i> Students</span>
+				 @include('includes.message')
+
+				 <div class="ui negative message confirmation">
+								  <div class="header">
+								   Are you sure you want to unenroll all students?
+								  </div>
+							
+						        <br>
+						        <a href="{{url('unenroll')}}" class="waves-effect waves-light btn green"><i class="material-icons left">check</i>Yes</a> <a class="waves-effect waves-light btn red cancel"><i class="material-icons left">close</i>No</a> 
+				 </div>
 				  <div class="row">
 					    <div class="col s12">
 					      <ul class="tabs">
-					        <li class="tab col s3"><a href="#students">Verified </a></li>
-					        <li class="tab col s3"><a href="#students2">Unverify 
+					      	<li class="tab col s3"><a href="#unenrolled">Unenrolled</a></li>
+					      	<li class="tab col s3"><a href="#enrolled">Enrolled</a></li>
+					        <li class="tab col s3"><a href="#students2">Unverified 
 					        	@if(count($unverify) > 0)
 					        		<span class="new badge">{{count($unverify)}}</span>
 					        	@endif
@@ -23,51 +44,146 @@
 					      </ul>
 					    </div>
 					     <br>
-					    <div id="students" class="col s12">
+					    <div id="unenrolled" class="col s12">
 
-					    	@if(count($verified) > 0)
-					    	  	<div class="row">
+					    	 <br>	
+					    	  <div class="row">
+							      <div class="col s3">
+							      	  <select id="course">
+									      <option value="" disabled selected>Sort by course</option>
+									       @foreach($courses as $course)
+												<option value="{{$course->course}}">{{$course->course}}</option>
+										   @endforeach
+									   </select>
+							      </div>
+							      <div class="col s3">
+							       	  <select id="year">
+									       <option value="" disabled selected>Sort by year level</option>
+									       <option value="1">1st year</option>
+									       <option value="2">2nd year</option>
+									       <option value="3">3rd year</option>
+									       <option value="4">4th year</option>
+									   </select>
+							      </div>
+							      <div class="col s3">
+							           <input placeholder="Search" id="search" type="text" class="validate">
+							      </div>
 
-							      <div class="col s4">
-							       	
+							       <div class="col s3">
+								      
+							          
 							      </div>
-							      <div class="col s4">
-							        <!-- Promo Content 2 goes here -->
-							      </div>
-							      <div class="col s4">
-							        <!-- Promo Content 3 goes here -->
-							      </div>
+						    </div> 
 
-							    </div>
-					    		<table class="highlight">
+					    	@if(count($unenrolled) > 0)
+
+					    		<table class="ui celled padded table attached">
 							        <thead>
 							          <tr>
 							              <th>Full Name</th>
 							              <th>Course & Year</th>
 							              <th>Email Address</th>
-							              <th>Enrolled</th>
+							              <th class="center">Options</th>
 							          </tr>
 							        </thead>
 
 							        <tbody>
-							        	@foreach($verified as $student)
-							        	  <tr class="clickable-row" data-href="{{url('account/registrar')}}/students/{{$student->email}}">
+							        	@foreach($unenrolled as $student)
+							        	  <tr>
 								            <td>{{$student->firstname}} {{$student->middlename}}. {{$student->lastname}}</td>
 								            <td>{{$student->course}}-{{$student->year_level}}</td>
 								            <td>{{$student->email}}</td>
-
-								            @if($student->enrolled)
-								            	<td class="green-text">Yes</td>
-								            @else
-								            	<td class="red-text">No</td>
-								            @endif
+								            <td class="center"><button class="waves-effect waves-light btn green clickable-row" data-href="{{url('account/registrar')}}/students/{{$student->email}}"><li class="fa fa-eye"></li></button></td>
 								          </tr>
 							            @endforeach
 							        </tbody>
 						      	</table>
 					    	@else
-					    		<br>
-					    		<div class="card-subtitle gray-text center">No verified students found.</div>
+					    		
+					    		<div class="ui attached warning message">
+								  	<div class="header center aligned">
+								  		@if($search)
+								  		   Search for "{{$search}}" no matched found!
+								  		@else
+								  			No students found
+								  		@endif
+								  	</div>
+								</div>
+					    	@endif
+					    	 
+					    </div>
+
+					    <div id="enrolled" class="col s12">
+
+					    	 <br>	
+					    	  <div class="row">
+							      <div class="col s3">
+							      	  <select id="course">
+									      <option value="" disabled selected>Sort by course</option>
+									       @foreach($courses as $course)
+												<option value="{{$course->course}}">{{$course->course}}</option>
+										   @endforeach
+									   </select>
+							      </div>
+							      <div class="col s3">
+							       	  <select id="year">
+									       <option value="" disabled selected>Sort by year level</option>
+									       <option value="1">1st year</option>
+									       <option value="2">2nd year</option>
+									       <option value="3">3rd year</option>
+									       <option value="4">4th year</option>
+									   </select>
+							      </div>
+							      <div class="col s3">
+							           <input placeholder="Search" id="search" type="text" class="validate">
+							      </div>
+
+							       <div class="col s3">
+								       	@if(count($enrolled) > 0)
+								       		 <a href="#" class="waves-effect waves-green btn red unenroll">Unenroll all</a>
+								       	@else
+
+								       	@endif
+							          
+							      </div>
+						    </div> 
+
+					    	@if(count($enrolled) > 0)
+
+					    	
+							    @include('includes.message')
+					    		<table class="ui celled padded table attached">
+							        <thead>
+							          <tr>
+							              <th>Full Name</th>
+							              <th>Course & Year</th>
+							              <th>Email Address</th>
+							              <th class="center">Options</th>
+							          </tr>
+							        </thead>
+
+							        <tbody>
+							        	@foreach($enrolled as $student)
+							        	  <tr>
+								            <td>{{$student->firstname}} {{$student->middlename}}. {{$student->lastname}}</td>
+								            <td>{{$student->course}}-{{$student->year_level}}</td>
+								            <td>{{$student->email}}</td>
+								            <td class="center"><button class="waves-effect waves-light btn green clickable-row" data-href="{{url('account/registrar')}}/students/{{$student->email}}"><li class="fa fa-eye"></li></button></td>
+								          </tr>
+							            @endforeach
+							        </tbody>
+						      	</table>
+					    	@else
+					    		
+					    		<div class="ui attached warning message">
+								  	<div class="header center aligned">
+								  		@if($search)
+								  		   Search for "{{$search}}" no matched found!
+								  		@else
+								  			No students found
+								  		@endif
+								  	</div>
+								</div>
 					    	@endif
 					    	 
 					    </div>
@@ -88,14 +204,19 @@
 							    </div>
 
 
-
 							  {!! Form::open(['action' => 'AdminController@verify_students', 'method' => 'POST'],['id' => 'verify-form']) !!}
 
 							  	<div class="card-action right buttons"><button class="waves-effect waves-light btn-flat green-text"><i class="material-icons left">check</i> Verify Selected</button> <a class="waves-effect waves-light btn-flat red-text"><i class="material-icons left">clear</i> Remove selected</a></div>
-
-					    		<table class="highlight">
+							  	<div class="ui attached info message">
+								  <div class="header">
+								   	What will happen after verifying students?
+								  </div>
+								  <p>Newly verified students will receive an email from the system with their account password.</p>
+								</div>
+					    		<table class="ui celled padded table attached">
 							        <thead>
 							          <tr>
+							               <th>View</th>
 							              <th>Full Name</th>
 							              <th>Desired course</th>
 							              <th>Email Address</th>
@@ -106,7 +227,8 @@
 
 							        <tbody>
 							        	@foreach($unverify as $student)
-								          <tr id="viewInformation" data-email="{{$student->email}}" data-name="{{$student->firstname}} {{$student->lastname}}"
+								          <tr>
+								          	<td><a class="waves-effect waves-light btn" id="viewInformation" data-email="{{$student->email}}" data-name="{{$student->firstname}} {{$student->lastname}}"
                                                 data-lastname="{{$student->lastname}}"  
                                                 data-firstname="{{$student->firstname}}" 
                                                 data-middlename="{{$student->middlename}}"
@@ -130,15 +252,14 @@
                                                 data-basic_education="{{$student->basic_education}}"  
                                                 data-secondary_education="{{$student->secondary_education}}"  
                                                 data-college_education="{{$student->college_education}}"  
-                                                data-enrolled="{{Date(('F d, Y'), strtotime($student->date_enrolled))}}" >
-
+                                                data-enrolled="{{Date(('F d, Y'), strtotime($student->date_enrolled))}}" ><i class="material-icons">account_box</i></a></td>
 								            <td>{{$student->firstname}} {{$student->middlename}}. {{$student->lastname}}</td>
 								            <td>{{$student->course}}</td>
 								            <td>{{$student->email}}</td>
 								            <td>{{Date(('F d, Y'), strtotime($student->date_enrolled))}}</td>
-								            <td id="checkboxes"><p>
+								            <td id="checkboxes"><p class="center">
 										      <input type="checkbox" class="verify-check" id="{{$student->email}}" name="emails[]" value="{{$student->email}}" />
-										      <label for="{{$student->email}}">Verify</label>
+										      <label for="{{$student->email}}"></label>
 										    </p></td>
 								          </tr>
 							            @endforeach
@@ -149,8 +270,10 @@
 						      	
 						     {!! Form::close() !!}
 					    	@else
-					    		<br>
-					    		<div class="card-subtitle gray-text center">No unverified students found.</div>
+					    	<br>	
+					    		<div class="ui attached warning message">
+								  	<div class="header center aligned">No unverified students yet.</div>
+								</div>
 					    	@endif
 					    </div>
 					    
@@ -162,17 +285,6 @@
 
 </div>
 
-@if(session('success'))
- 	<script type="text/javascript">
- 			Materialize.toast('Verification successful, Password is successfully emailed', 5000,'green');
- 	</script>
-@endif
-
-@if(session('success'))
- 	<script type="text/javascript">
- 		 Materialize.toast('Verification unsuccessful, there is no internet connection to send password to email', 5000,'red');
- 	</script>
-@endif
 
  <!-- View unverified student information -->
  <div id="information" class="modal modal-fixed-footer">
@@ -199,7 +311,6 @@
  		  <li class="collection-item" id="college_education"></li>
  		  <li class="collection-item" id="date_enrolled"></li>
 
-	     
 	    </ul>
     </div>
     <div class="modal-footer">
@@ -215,6 +326,9 @@
 		$('.modal').modal();
 		$('.buttons').hide();
 
+
+		$('.confirmation').hide();
+		var url = window.location.href;  
 		 var $checkboxes = $('#checkboxes input[type="checkbox"]');
 
 		  $checkboxes.change(function(){
@@ -238,6 +352,62 @@
         	window.location = $(this).data("href");
     	});
 
+
+		 $("#course" ).change(function() {
+
+           window.location.href =	updateQueryStringParameter( url, 'course', $(this).val() )
+            
+        });
+
+		 $("#year" ).change(function() {
+
+           window.location.href =	updateQueryStringParameter( url, 'year', $(this).val() )
+            
+        });
+
+		  $(".unenroll" ).click(function() {
+
+          		$('.confirmation').show();
+            
+        });
+
+		    $(".cancel" ).click(function() {
+
+          		$('.confirmation').hide();
+            
+        });
+
+
+
+    	 $('#search').keypress(function (e) {
+		  if (e.which == 13) {
+		   	 window.location.href =	updateQueryStringParameter( url, 'search', $(this).val() )
+		  }
+		});
+
+    	 function updateQueryStringParameter(uri, key, value) {
+			  var re = new RegExp("([?&])" + key + "=.*?(&|#|$)", "i");
+			  if( value === undefined ) {
+			  	if (uri.match(re)) {
+					return uri.replace(re, '$1$2');
+				} else {
+					return uri;
+				}
+			  } else {
+			  	if (uri.match(re)) {
+			  		return uri.replace(re, '$1' + key + "=" + value + '$2');
+				} else {
+			    var hash =  '';
+			    if( uri.indexOf('#') !== -1 ){
+			        hash = uri.replace(/.*#/, '#');
+			        uri = uri.replace(/#.*/, '');
+			    }
+			    var separator = uri.indexOf('?') !== -1 ? "&" : "?";    
+			    return uri + separator + key + "=" + value + hash;
+			  }
+			  }  
+		}
+
     	$("#viewInformation").click(function() {
 
 
@@ -257,9 +427,9 @@
     		let zipcode = "Zipcode: " + $(this).data("zipcode");
     		let guardian = "Guardian: " + $(this).data("guardian");
     		let guardian_relationship = "Guardian Relationship" + $(this).data("guardian_relationship");
-    		let basic_education = "Basic Education" + $(this).data("basic_education");
-    		let secondary_education = "Secondary Education" + $(this).data("secondary_education");
-    		let college_education = "College Education" + $(this).data("college_education");
+    		let basic_education = "Basic Education: " + $(this).data("basic_education");
+    		let secondary_education = "Secondary Education: " + $(this).data("secondary_education");
+    		let college_education = "College Education: " + $(this).data("college_education");
     		let date_enrolled = "Date Registered: " + $(this).data("enrolled");
     		// Set
     		$('#firstname').text(firstname);

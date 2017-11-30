@@ -14,7 +14,7 @@ nav ul a {
     
 }
 nav ul a:hover {
-    background-color: #333 !important;
+    background-color: #e91e63 !important;
     color: #fff !important;
 }
 
@@ -68,6 +68,22 @@ select option{
 
 	width:28%;
 }
+
+
+.form-container{
+
+    background-size:cover;
+    background-position:center;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content: center;
+}
+.form-container .card{
+
+    width:28%;
+}
 .courses h3{
 
 	padding: 20px;
@@ -99,6 +115,7 @@ select option{
 
 /* Register */
 
+
 .fields{
 
 	padding: 0 20px 0 20px;
@@ -107,7 +124,7 @@ select option{
 
 /* Profile */
 
-.sidenav .collection-item {
+/*.sidenav .collection-item {
  
     border-bottom: 0 !important;
 }
@@ -124,7 +141,7 @@ select option{
 .profile img.responsive-img, video.responsive-video {
     max-width: 100px !important;
     height: 100px !important;
-}
+}*/
 
 .coordinator .student{
 
@@ -133,20 +150,12 @@ select option{
 
 }
 
-.coordinator .collection a.collection-item {
-  
-    color: #333 !important;
+
+.mtop{
+
+    margin-top:10px !important;
 }
 
-.coordinator .collection a.collection-item:not(.active):hover {
-    background-color: #e91e63 !important;
-    color: #fff !important;
-}
-
-.coordinator img.responsive-img, video.responsive-video {
-    max-width: 100px !important;
-    height: 100px !important;
-}
 
 .dashboard .fi-torso{
 
@@ -179,5 +188,75 @@ span.badge.new {
     color: #fff !important;
 }
 
+.student-list{
+
+
+    background-color: #fff;
+    padding: 0 0 0 0;
+    margin: 0 !important;
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 60vh;
+}
+
+.item{
+
+    padding: 10px 10px 5px 10px !important;
+    margin:0 !important;
+    border-bottom: 1px solid #ddd !important;
+}
+
+.item:hover{
+
+        background-color: #f4f4f4 !important; 
+}
+
+.notifications{
+
+    height: 85vh !important;
+  
+}
+
+.notifications .card-content {
+    height: 75vh !important;
+    overflow-y: scroll !important;
+}
+
+
+
+.darken{
+
+    background-color:#1b1c1d !important
+}
+
+#enrolled select{
+
+    display: inherit !important;
+}
+
+#unenrolled select{
+
+    display: inherit !important;
+}
+
+.coordinator select{
+
+    display: inherit !important;
+}
+
+
+
+#addFaculty select{
+
+    display:inherit !important;
+  
+}
+
+#changeSemester select{
+
+    display:inherit !important;
+}
 
 
