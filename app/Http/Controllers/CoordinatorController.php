@@ -136,13 +136,37 @@ class CoordinatorController extends Controller
             
              foreach($schedule_id as $sched_id){ 
 
-                $data = array(
+                $conflicted = $database->checkConflict($sched_id);
 
-                    'standing' => $request->standing,
-                    'evaluated' => 1
-                );
+                $schedule_day = $conflicted->schedule_day;
+                $semester = $conflicted->school_year;
+                $start_time = $conflicted->start_time;
+                $room = $conflicted->room;
+                $subject = $conflicted->subject;
 
-                $update = $database->updateRequest($sched_id, $student_email,$data);
+                $schedule = $database->checkConflicted($schedule_day, $semester, $start_time, $room);
+
+                if($conflicted){
+
+                     return redirect('account/coordinator/request/'.$request->student_email.'/'.$notification_id)->with('error', "Subject " .$subject. " has conflict.");
+
+
+                }else{
+
+                      $data = array(
+
+                        'standing' => $request->standing,
+                        'evaluated' => 1
+                     );
+
+                
+
+                         $update = $database->updateRequest($sched_id, $student_email,$data);
+
+                }
+
+
+              
             
              }
 
