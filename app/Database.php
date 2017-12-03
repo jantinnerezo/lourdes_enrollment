@@ -101,6 +101,39 @@ class Database extends Model
     }
 
 
+     public function checkConflict($sched_id){
+
+        $result = DB::table('tbl_studsubjects')->where('tbl_studsubjects.schedule_id', '=', $sched_id)
+          ->join('tbl_schedule', 'tbl_studsubjects.schedule_id', '=', 'tbl_schedule.schedule_id')
+          ->join('tbl_subjects', 'tbl_schedule.subject_id', '=', 'tbl_subjects.subject_id')
+          ->select('tbl_schedule.*','tbl_subjects.*')
+          ->first(); 
+
+        if($result){
+           return $results;
+        }else{
+            return false;
+        }
+
+    }
+    public function checkConflicted($schedule_day, $semester, $start_time, $room){
+
+        $result = DB::table('tbl_schedule')
+                    ->where('schedule_day', '=', $schedule_day)
+                    ->where('semester', '=', $semester)
+                    ->where('start_time', '=', $start_time)
+                    ->where('room', '=', $room)
+                    ->first(); 
+
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+
     // Fetch All Unenrolled
      public function fetchUnenrolled($search = FALSE,$course = False, $year_level = FALSE){
 
@@ -229,7 +262,7 @@ class Database extends Model
                       ->where('tbl_students.confirmed', '=', 1)
                       ->where('tbl_students.enrolled', '=', 1)
                        ->orderBy('tbl_students.firstname', 'asc')
-                      ->get(); 
+                      ->gfet(); 
               if($result){
                   return $result;
               }else{
